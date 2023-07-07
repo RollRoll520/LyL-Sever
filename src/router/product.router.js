@@ -18,7 +18,7 @@ const router = new Router({ prefix: "/product" });
 router.post("/upload", upload);
 
 // 删除图片接口
-router.post("/unlink/:id", hadAdminPermission, unlink);
+// router.post("/unlink/:id", hadAdminPermission, unlink);
 
 // 创建产品信息接口
 router.post("/new", validator, create);

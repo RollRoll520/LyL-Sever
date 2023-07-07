@@ -1,4 +1,10 @@
 module.exports = {
+  ///user
+  userFormatError: {
+    code: "10001",
+    message: "用户名信息不完整",
+    result: "",
+  },
   userFormateError: {
     code: "10001",
     message: "用户名或密码为空",
@@ -24,6 +30,17 @@ module.exports = {
     message: "用户登录失败",
     result: "",
   },
+  passwordUpdateError: {
+    code: "10006",
+    message: "修改密码错误",
+    result: "",
+  },
+  oldPasswordError: {
+    code: "10007",
+    message: "原密码错误",
+    result: "",
+  },
+  ///admin
   adminFormatError: {
     code: "20001",
     message: "用户名或密码为空",

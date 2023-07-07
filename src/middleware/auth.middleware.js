@@ -3,8 +3,13 @@ const { JWT_SECRET } = require("../config/config.default")
 const { tokenExpiredError, invalidToken, hasNotAdminPermission } = require("../const/err.type")
 
 const auth = async (ctx, next) => {
-  const { authorization } = ctx.request.header;
-  const token = authorization.replace("Bearer", "");
+  // const authorization = ctx.request.header.authorization;
+  // if (!authorization) {
+  //   console.error("缺少authorization请求头");
+  //   return ctx.app.emit("error", invalidToken, ctx);
+  // }
+  const token = ctx.request.header["token"];
+  // const token = authorization.replace("Bearer ", "");
   try {
     //user中包含了payload的id、user_name信息
     const user = jwt.verify(token, JWT_SECRET);
