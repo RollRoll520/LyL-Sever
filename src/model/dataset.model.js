@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const seq = require("../database/seq.mysql");
+const User = require("./user.model");
 
 // Dataset 数据集表
 const Dataset = seq.define(
@@ -10,11 +11,6 @@ const Dataset = seq.define(
       primaryKey: true,
       autoIncrement: true,
       comment: "数据集ID",
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      comment: "数据集名称",
     },
     u_id: {
       type: DataTypes.INTEGER,
@@ -36,7 +32,7 @@ const Dataset = seq.define(
       comment: "数据集路径",
     },
     type: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM("test", "train"),
       allowNull: false,
       comment: "数据集类型",
     },

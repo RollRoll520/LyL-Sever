@@ -131,4 +131,19 @@ module.exports = {
     message: "查找产品信息错误",
     result: "",
   },
+  datasetInfoFormatError: {
+    code: "40001",
+    message: "数据集信息格式错误",
+    result: "",
+  },
+  datasetCreateError: {
+    code: "40002",
+    message: "数据集上传失败",
+    result: "",
+  },
+  datasetFormatError: {
+    code: "40003",
+    message: "数据集格式错误",
+    result: "",
+  },
 };
