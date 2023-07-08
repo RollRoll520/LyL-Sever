@@ -40,11 +40,6 @@ module.exports = {
     message: "原密码错误",
     result: "",
   },
-  invalidPassword: {
-    code: "10006",
-    message: "密码不匹配",
-    result: "",
-  },
   tokenExpiredError: {
     code: "10101",
     message: "token已过期",
@@ -60,126 +55,55 @@ module.exports = {
     message: "没有管理员权限",
     result: "",
   },
-  fileUploadError: {
-    code: "10201",
-    message: "用户头像上传失败",
-    result: "",
-  },
-  unSupportedFileType: {
-    code: "10202",
-    message: "不支持的文件格式",
-    result: "",
-  },
-  ///admin
-  adminFormatError: {
-    code: "20001",
-    message: "用户名或密码为空",
-    result: "",
-  },
-  adminAlreadyExist: {
-    code: "20002",
-    message: "用户已经存在",
-    result: "",
-  },
-  adminRegisterError: {
-    code: "20003",
-    message: "用户注册错误",
-    result: "",
-  },
-  adminDoesNotExist: {
-    code: "20004",
-    message: "用户不存在",
-    result: "",
-  },
-  adminLoginError: {
-    code: "20005",
-    message: "用户登录失败",
-    result: "",
-  },
-  personFormatError: {
-    code: "10203",
-    message: "人员信息格式错误",
-    result: "",
-  },
-  operatePersonError: {
-    code: "10204",
-    message: "操作人员信息出错",
-    result: "",
-  },
-  invalidPersonId: {
-    code: "10205",
-    message: "待修改的人员不存在或者未进行修改",
-    result: "",
-  },
-  productFormatError: {
-    code: "30001",
-    message: "产品信息格式错误",
-    result: "",
-  },
-  operateProductError: {
-    code: "30002",
-    message: "修改产品信息错误",
-    result: "",
-  },
-  invalidProductId: {
-    code: "30003",
-    message: "产品信息编号错误",
-    result: "",
-  },
-  findProductError: {
-    code: "30004",
-    message: "查找产品信息错误",
-    result: "",
-  },
   //dataset and model
   datasetInfoFormatError: {
-    code: "40001",
+    code: "10201",
     message: "数据集信息格式错误",
     result: "",
   },
   datasetCreateError: {
-    code: "40002",
+    code: "10202",
     message: "数据集上传失败",
     result: "",
   },
   datasetFormatError: {
-    code: "40003",
+    code: "10203",
     message: "数据集格式错误",
     result: "",
   },
   findTrainSetError: {
-    code: "40004",
+    code: "10204",
     message: "寻找训练集错误",
     result: "",
   },
   findTestSetError: {
-    code: "40005",
+    code: "10205",
     message: "寻找测试集错误",
     result: "",
   },
   modelTestError: {
-    code: "40101",
+    code: "10301",
     message: "在线测试错误",
     result: "",
   },
   modelTrainError: {
-    code: "40102",
+    code: "10302",
     message: "在线训练错误",
     result: "",
   },
   modelDownloadError: {
-    code: "40103",
+    code: "10303",
     message: "下载模型错误",
     result: "",
   },
   //record
   testRecordFormatError: {
-    code: "10501",
+    code: "10401",
     message: "测试记录格式错误",
     result: "",
   },
   trainRecordFormatError: {
-    code: "10502",
+    code: "10402",
     message: "训练记录格式错误",
     result: "",
   },
