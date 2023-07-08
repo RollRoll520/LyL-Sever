@@ -15,12 +15,6 @@ class ModelController {
         datasetPath,
         modelPath,
       ]);
-      // 将 Python 脚本的输出作为响应返回给前端
-      ctx.body = {
-        code: 0,
-        message: "模型测试成功",
-        result: result,
-      };
     } catch (error) {
       // 将错误信息作为响应返回给前端
       console.error(error);
@@ -71,12 +65,8 @@ class ModelController {
         resultPath,
         modelFile,
       ]);
+      ctx.state.test_result = result;
       // 将 Python 脚本的输出作为响应返回给前端
-      ctx.body = {
-        code: 0,
-        message: "模型测试成功",
-        result: result,
-      };
     } catch (error) {
       // 将错误信息作为响应返回给前端
       console.error(error);

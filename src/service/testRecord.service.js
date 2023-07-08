@@ -1,26 +1,26 @@
-const TestRecord = require("../model/TestRecord");
+const TestRecord = require("../model/testRecord.model");
 
 class TestRecordService {
-  async addRecord(dataset_id, u_id) {
+  async addTestRecord(dataset_id, u_id) {
     const record = await TestRecord.create({ dataset_id, u_id });
-    return record;
+    return record.dataValues;
   }
 
-  async updateRecord(id, end_time) {
+  async updateTestRecord(id, end_time) {
     const record = await TestRecord.findByPk(id);
     if (!record) {
       return null;
     } else {
       await record.update({ end_time });
-      return record;
+      return record.dataValues;
     }
   }
 
-  async getUserRecords(uid) {
+  async getUserTestRecords(uid) {
     const records = await TestRecord.findAll({
       where: { u_id: uid },
     });
-    return records;
+    return records.dataValues;
   }
 }
 module.exports = new TestRecordService;

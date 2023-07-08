@@ -6,8 +6,9 @@ const getTrainSetInfo = async (ctx, next) => {
     const { id: u_id } = ctx.state.user;
     const res = await findLatestDatasetByUidAndType(u_id, "train");
     ctx.state.path = res.path;
+    ctx.state.dataset_id = res.id;
   } catch (err) {
-    console(err);
+    console.log(err);
     findTrainSetError.result = err;
     return ctx.app.emit("error", findTrainSetError, ctx);
   }
@@ -19,8 +20,9 @@ const getTestSetInfo = async (ctx, next) => {
     const { id: u_id } = ctx.state.user;
     const res = await findLatestDatasetByUidAndType(u_id, "test");
     ctx.state.path = res.path;
+    ctx.state.dataset_id = res.id;
   } catch (err) {
-    console(err);
+    console.log(err);
     findTestSetError.result = err;
     return ctx.app.emit("error", findTestSetError, ctx);
   }

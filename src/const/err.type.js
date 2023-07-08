@@ -107,4 +107,24 @@ module.exports = {
     message: "训练记录格式错误",
     result: "",
   },
+  createTestRecordError: {
+    code: "10403",
+    message: "创建训练记录错误",
+    result: "",
+  },
+  createTrainRecordError: {
+    code: "10404",
+    message: "创建测试记录错误",
+    result: "",
+  },
+  updateTestRecordError: {
+    code: "10405",
+    message: "更新训练记录错误",
+    result: "",
+  },
+  updateTrainRecordError: {
+    code: "10406",
+    message: "更新测试记录错误",
+    result: "",
+  },
 };

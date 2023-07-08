@@ -11,7 +11,6 @@ class DatasetController {
 
     // 1. 获取上传文件的信息
     const tempFile = ctx.request.files.dataset;
-    console.log(tempFile);
 
     // 2. 校验文件格式
     const extname = path.extname(tempFile.originalFilename).toLowerCase();
@@ -63,7 +62,6 @@ class DatasetController {
     const { type } = ctx.request.body;
     const { id } = ctx.state.user;
     const { path: filePath } = ctx.state;
-    console.log(filePath);
     const dataset = {
       u_id: id,
       type,
