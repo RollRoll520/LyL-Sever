@@ -40,32 +40,6 @@ module.exports = {
     message: "原密码错误",
     result: "",
   },
-  ///admin
-  adminFormatError: {
-    code: "20001",
-    message: "用户名或密码为空",
-    result: "",
-  },
-  adminAlreadyExist: {
-    code: "20002",
-    message: "用户已经存在",
-    result: "",
-  },
-  adminRegisterError: {
-    code: "20003",
-    message: "用户注册错误",
-    result: "",
-  },
-  adminDoesNotExist: {
-    code: "20004",
-    message: "用户不存在",
-    result: "",
-  },
-  adminLoginError: {
-    code: "20005",
-    message: "用户登录失败",
-    result: "",
-  },
   invalidPassword: {
     code: "10006",
     message: "密码不匹配",
@@ -94,6 +68,32 @@ module.exports = {
   unSupportedFileType: {
     code: "10202",
     message: "不支持的文件格式",
+    result: "",
+  },
+  ///admin
+  adminFormatError: {
+    code: "20001",
+    message: "用户名或密码为空",
+    result: "",
+  },
+  adminAlreadyExist: {
+    code: "20002",
+    message: "用户已经存在",
+    result: "",
+  },
+  adminRegisterError: {
+    code: "20003",
+    message: "用户注册错误",
+    result: "",
+  },
+  adminDoesNotExist: {
+    code: "20004",
+    message: "用户不存在",
+    result: "",
+  },
+  adminLoginError: {
+    code: "20005",
+    message: "用户登录失败",
     result: "",
   },
   personFormatError: {
@@ -131,6 +131,7 @@ module.exports = {
     message: "查找产品信息错误",
     result: "",
   },
+  //dataset and model
   datasetInfoFormatError: {
     code: "40001",
     message: "数据集信息格式错误",
@@ -146,29 +147,40 @@ module.exports = {
     message: "数据集格式错误",
     result: "",
   },
-  modelTestError: {
-    code: "40004",
-    message: "在线测试错误",
-    result: "",
-  },
-  modelTrainError: {
-    code: "40005",
-    message: "在线训练错误",
-    result: "",
-  },
-  modelDownloadError: {
-    code: "40006",
-    message: "下载模型错误",
-    result: "",
-  },
   findTrainSetError: {
-    code: "40007",
+    code: "40004",
     message: "寻找训练集错误",
     result: "",
   },
   findTestSetError: {
-    code: "40008",
+    code: "40005",
     message: "寻找测试集错误",
+    result: "",
+  },
+  modelTestError: {
+    code: "40101",
+    message: "在线测试错误",
+    result: "",
+  },
+  modelTrainError: {
+    code: "40102",
+    message: "在线训练错误",
+    result: "",
+  },
+  modelDownloadError: {
+    code: "40103",
+    message: "下载模型错误",
+    result: "",
+  },
+  //record
+  testRecordFormatError: {
+    code: "10501",
+    message: "测试记录格式错误",
+    result: "",
+  },
+  trainRecordFormatError: {
+    code: "10502",
+    message: "训练记录格式错误",
     result: "",
   },
 };

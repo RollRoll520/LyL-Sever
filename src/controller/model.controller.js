@@ -4,7 +4,7 @@ const { runPythonScript } = require("../service/model.service");
 const { modelTestError, modelTrainError } = require("../const/err.type");
 
 class ModelController {
-  async trainHandler(ctx, next) {
+  async trainModel(ctx, next) {
     const pyFilePath = path.join(__dirname, `../../learn/train_model.py`); // 指定 Python 脚本的路径
     const datasetPath = ctx.state.path; // 训练集文件路径
     const modelPath = path.join(__dirname, `../../learn/model.joblib`); // 模型文件路径
@@ -30,7 +30,7 @@ class ModelController {
     await next();
   }
 
-  async testHandler(ctx, next) {
+  async testModel(ctx, next) {
     console.log("start test");
     const { id: u_id, username } = ctx.state.user;
     const pyFilePath = path.join(__dirname, `../../learn/test_model.py`); // 指定 Python 脚本的路径
@@ -82,6 +82,25 @@ class ModelController {
       console.error(error);
       ctx.app.emit("error", modelTestError, ctx);
     }
+
+    await next();
+  }
+
+  async getModel(ctx, next) {
+    const filepath = path.join(__dirname, "../../learn/model.joblib");
+
+    const stat = fs.statSync(filepath);
+
+    // 设置响应头，告诉浏览器响应体的类型和附件的名称
+    ctx.set("Content-Type", "application/octet-stream");
+    ctx.set(
+      "Content-Disposition",
+      `attachment; filename="${path.basename(filepath)}"`
+    );
+    ctx.set("Content-Length", stat.size);
+
+    // 将模型文件作为响应体发送给客户端
+    ctx.body = fs.createReadStream(filepath);
 
     await next();
   }
