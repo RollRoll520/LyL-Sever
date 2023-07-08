@@ -1,10 +1,12 @@
 const {
   createTestRecordError,
   updateTestRecordError,
+  getTestRecordError,
 } = require("../const/err.type");
 const {
   addTestRecord,
   updateTestRecord,
+  getUserTestRecords,
 } = require("../service/testRecord.service");
 
 class TestRecordController {
@@ -46,6 +48,21 @@ class TestRecordController {
     await next();
   }
   async findTestRecordByUid(ctx, next) {
+    const { id: u_id } = ctx.state.user;
+    try {
+      const res = await getUserTestRecords(u_id);
+      console.log(res);
+      ctx.body = {
+        code: 0,
+        message: "获取测试记录成功",
+        result: res,
+        count: res.length,
+      };
+    } catch (err) {
+      console.log(err);
+      getTestRecordError.result = err;
+      ctx.app.emit("error", getTestRecordError, ctx);
+    }
     await next();
   }
 }

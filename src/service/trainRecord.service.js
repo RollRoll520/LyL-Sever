@@ -19,8 +19,9 @@ class TrainRecordService {
   async getUserTrainRecords(uid) {
     const records = await TrainRecord.findAll({
       where: { u_id: uid },
+      raw: true,
     });
-    return records.dataValues;
+    return records;
   }
 }
 module.exports = new TrainRecordService();

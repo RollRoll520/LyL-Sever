@@ -19,8 +19,9 @@ class TestRecordService {
   async getUserTestRecords(uid) {
     const records = await TestRecord.findAll({
       where: { u_id: uid },
+      raw: true,
     });
-    return records.dataValues;
+    return records;
   }
 }
 module.exports = new TestRecordService;

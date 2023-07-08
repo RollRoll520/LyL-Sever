@@ -127,4 +127,14 @@ module.exports = {
     message: "更新测试记录错误",
     result: "",
   },
+  getTestRecordError: {
+    code: "10407",
+    message: "获取训练记录错误",
+    result: "",
+  },
+  getTrainRecordError: {
+    code: "10408",
+    message: "获取测试记录错误",
+    result: "",
+  },
 };
