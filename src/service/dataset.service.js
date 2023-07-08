@@ -5,6 +5,18 @@ class DatasetService {
     const res = await Dataset.create(dataset);
     return res.dataValues;
   }
+
+  async findLatestDatasetByUidAndType(uid, type) {
+    const res = await Dataset.findOne({
+      where: {
+        u_id: uid,
+        type: type,
+      },
+      order: [["upload_time", "DESC"]],
+    });
+
+    return res.dataValues;
+  }
 }
 
 module.exports = new DatasetService();

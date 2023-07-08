@@ -146,4 +146,29 @@ module.exports = {
     message: "数据集格式错误",
     result: "",
   },
+  modelTestError: {
+    code: "40004",
+    message: "在线测试错误",
+    result: "",
+  },
+  modelTrainError: {
+    code: "40005",
+    message: "在线训练错误",
+    result: "",
+  },
+  modelDownloadError: {
+    code: "40006",
+    message: "下载模型错误",
+    result: "",
+  },
+  findTrainSetError: {
+    code: "40007",
+    message: "寻找训练集错误",
+    result: "",
+  },
+  findTestSetError: {
+    code: "40008",
+    message: "寻找测试集错误",
+    result: "",
+  },
 };
