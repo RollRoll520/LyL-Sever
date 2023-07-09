@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const seq = require("../database/seq.mysql");
+const TrainRecord = require("./trainRecord.model");
 
 // TrainResult 训练结果表
 const TrainResult = seq.define(

@@ -4,13 +4,15 @@ const {  trainModel, testModel, getModel } = require("../controller/model.contro
 const { getTestSetInfo, getTrainSetInfo } = require("../middleware/model.middleware");
 const { createTrainRecord, updateTrainRecord } = require("../controller/trainRecord.controller");
 const { createTestRecord, updateTestRecord } = require("../controller/testRecord.controller");
+const { createTestResult } = require("../controller/testResult.controller");
+const { createTrainResult } = require("../controller/trainResult.controller");
 
 
 const router = new Router({ prefix: "/model" });
 
-router.post("/train",auth,getTrainSetInfo,createTrainRecord,trainModel,updateTrainRecord );
+router.post("/train",auth,getTrainSetInfo,createTrainRecord,trainModel,updateTrainRecord,createTrainResult);
 
-router.post("/test",auth,getTestSetInfo,createTestRecord,testModel,updateTestRecord);
+router.post("/defaultTest",auth,getTestSetInfo,createTestRecord,testModel,updateTestRecord,createTestResult);
 
 router.get("/download",auth,getModel);
 

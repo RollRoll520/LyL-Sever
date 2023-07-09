@@ -100,7 +100,7 @@ class UserController {
 
   async updatePsw(ctx, next) {
     const { id } = ctx.state.user;
-    const { oldPassword, password } = ctx.request.body;
+    const { password } = ctx.request.body;
 
     try {
       const res = await updatePassword(id, password);

@@ -5,7 +5,7 @@ const getTrainSetInfo = async (ctx, next) => {
   try {
     const { id: u_id } = ctx.state.user;
     const res = await findLatestDatasetByUidAndType(u_id, "train");
-    ctx.state.path = res.path;
+    ctx.state.dataset_path = res.path;
     ctx.state.dataset_id = res.id;
   } catch (err) {
     console.log(err);

@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const seq = require("../database/seq.mysql");
+const TestRecord = require("./testRecord.model");
 
 // TestResult 测试结果表
 const TestResult = seq.define(

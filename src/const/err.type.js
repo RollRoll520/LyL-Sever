@@ -6,37 +6,37 @@ module.exports = {
     result: "",
   },
   userFormateError: {
-    code: "10001",
+    code: "10002",
     message: "用户名或密码为空",
     result: "",
   },
   userAlreadyExist: {
-    code: "10002",
+    code: "10003",
     message: "用户已经存在",
     result: "",
   },
   userRegisterError: {
-    code: "10003",
+    code: "10004",
     message: "用户注册错误",
     result: "",
   },
   userDoesNotExist: {
-    code: "10004",
+    code: "10005",
     message: "用户不存在",
     result: "",
   },
   userLoginError: {
-    code: "10005",
+    code: "10006",
     message: "用户登录失败",
     result: "",
   },
   passwordUpdateError: {
-    code: "10006",
+    code: "10007",
     message: "修改密码错误",
     result: "",
   },
   oldPasswordError: {
-    code: "10007",
+    code: "10008",
     message: "原密码错误",
     result: "",
   },
@@ -135,6 +135,27 @@ module.exports = {
   getTrainRecordError: {
     code: "10408",
     message: "获取测试记录错误",
+    result: "",
+  },
+  //result
+  createTestResultError: {
+    code: "10501",
+    message: "创建测试结果文件错误",
+    result: "",
+  },
+  createTrainResultError: {
+    code: "10502",
+    message: "创建训练结果模型错误",
+    result: "",
+  },
+  getTestResultError: {
+    code: "10503",
+    message: "获取测试结果文件错误",
+    result: "",
+  },
+  getTrainResultError: {
+    code: "10504",
+    message: "获取训练结果模型错误",
     result: "",
   },
 };

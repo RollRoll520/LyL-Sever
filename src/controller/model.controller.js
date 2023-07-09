@@ -2,12 +2,17 @@ const path = require("path");
 const fs = require("fs");
 const { runPythonScript } = require("../service/model.service");
 const { modelTestError, modelTrainError } = require("../const/err.type");
+const {
+  DEFAULT_MODEL_PATH,
+  TEST_PYTHON_PATH,
+  TRAIN_PYTHON_PATH,
+} = require("../config/config.default");
 
 class ModelController {
   async trainModel(ctx, next) {
-    const pyFilePath = path.join(__dirname, `../../learn/train_model.py`); // 指定 Python 脚本的路径
-    const datasetPath = ctx.state.path; // 训练集文件路径
-    const modelPath = path.join(__dirname, `../../learn/model.joblib`); // 模型文件路径
+    const pyFilePath = path.join(__dirname, TRAIN_PYTHON_PATH); // 指定 Python 脚本的路径
+    const datasetPath = ctx.state.dataset_path; // 训练集文件路径
+    const modelPath = path.join(__dirname, DEFAULT_MODEL_PATH); // 模型文件路径
 
     try {
       // 执行 Python 脚本并等待结果
@@ -15,6 +20,9 @@ class ModelController {
         datasetPath,
         modelPath,
       ]);
+      //todo:从result中解析生成的model文件名
+      ctx.state.model_name = "todo";
+      ctx.state.model_path = path.join(__dirname, DEFAULT_MODEL_PATH);;
     } catch (error) {
       // 将错误信息作为响应返回给前端
       console.error(error);
@@ -27,7 +35,7 @@ class ModelController {
   async testModel(ctx, next) {
     console.log("start test");
     const { id: u_id, username } = ctx.state.user;
-    const pyFilePath = path.join(__dirname, `../../learn/test_model.py`); // 指定 Python 脚本的路径
+    const pyFilePath = path.join(__dirname, TEST_PYTHON_PATH); // 指定 Python 脚本的路径
     const testSetPath = ctx.state.path; // 测试集文件路径
 
     const now = new Date();
@@ -56,7 +64,7 @@ class ModelController {
       resultDir,
       `${username}_${formattedTimeStr}.json`
     );
-    const modelFile = path.join(__dirname, `../../learn/model.joblib`); // 模型文件路径
+    const modelFile = path.join(__dirname, DEFAULT_MODEL_PATH); // 模型文件路径
 
     try {
       // 执行 Python 脚本并等待结果
@@ -66,6 +74,8 @@ class ModelController {
         modelFile,
       ]);
       ctx.state.test_result = result;
+      ctx.state.result_path = resultPath;
+      ctx.state.result_name = `${username}_${formattedTimeStr}.json`;
       // 将 Python 脚本的输出作为响应返回给前端
     } catch (error) {
       // 将错误信息作为响应返回给前端
@@ -77,7 +87,7 @@ class ModelController {
   }
 
   async getModel(ctx, next) {
-    const filepath = path.join(__dirname, "../../learn/model.joblib");
+    const filepath = path.join(__dirname, DEFAULT_MODEL_PATH);
 
     const stat = fs.statSync(filepath);
 
