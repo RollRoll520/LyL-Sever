@@ -3,8 +3,8 @@ const bcrypt = require("bcryptjs");
 
 class UserService {
   // 创建用户
-  async createUser(username, password, email) {
-    const res = await User.create({ username, password, email });
+  async createUser(username, password, email, role) {
+    const res = await User.create({ username, password, email, role });
     return res.dataValues;
   }
 
@@ -30,12 +30,12 @@ class UserService {
   }
 
   // 修改用户信息
-  async updateUser(id, username, email) {
+  async updateUser(id, email) {
     const user = await User.findOne({ where: { id } });
     if (!user) {
       throw new Error(`User ${id} not found`);
     }
-    const updatedUser = await user.update({ username, email });
+    const updatedUser = await user.update({ email });
     return updatedUser.dataValues;
   }
 
@@ -47,6 +47,11 @@ class UserService {
     }
     const updatedUser = await user.update({ password: password });
     return updatedUser.dataValues;
+  }
+
+  async getUserInfo(id) {
+    const user = await User.findOne({ where: { id } });
+    return user.dataValues;
   }
 }
 

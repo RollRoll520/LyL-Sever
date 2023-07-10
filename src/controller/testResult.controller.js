@@ -22,12 +22,12 @@ class TestResultService {
         duration: `${duration.toFixed(2)}`,
         resultFileName: res.filename,
       };
+      await next();
     } catch (err) {
       console.log(err);
       createTestResultError.result = err;
       ctx.app.emit("error", createTestResultError, ctx);
     }
-    await next();
   }
   async getUserTestResult(ctx, next) {
     const { id: u_id } = ctx.state.user;
@@ -56,12 +56,12 @@ class TestResultService {
         getTestResultError.result = "测试结果不存在或不属于当前用户！";
         ctx.app.emit("error", getTestResultError, ctx);
       }
+      await next();
     } catch (err) {
       console.log(err);
       getTestResultError.result = err;
       ctx.app.emit("error", getTestResultError, ctx);
     }
-    await next();
   }
 }
 

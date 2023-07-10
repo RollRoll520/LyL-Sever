@@ -20,10 +20,10 @@ class UserController {
   async register(ctx, next) {
     // 1. 获取数据
     const { username, password, email } = ctx.request.body;
-
+    const {role} = ctx.state
     // 2. 操作数据库
     try {
-      const res = await createUser(username, password, email);
+      const res = await createUser(username, password, email,role);
       console.log(res);
 
       // 3. 返回结果
@@ -33,6 +33,7 @@ class UserController {
         result: {
           id: res.id,
           username: res.username,
+          role: res.role
         },
       };
     } catch (err) {
@@ -77,10 +78,9 @@ class UserController {
 
   async update(ctx, next) {
     const { id } = ctx.state.user;
-    const { username, email } = ctx.request.body;
-
+    const {  email } = ctx.request.body;
     try {
-      const res = await updateUser(id, username, email);
+      const res = await updateUser(id, email);
       console.log(res);
 
       ctx.body = {

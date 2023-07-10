@@ -1,6 +1,11 @@
-const jwt = require("jsonwebtoken")
-const { JWT_SECRET } = require("../config/config.default")
-const { tokenExpiredError, invalidToken, hasNotAdminPermission } = require("../const/err.type")
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../config/config.default");
+const {
+  tokenExpiredError,
+  invalidToken,
+  hasNotAdminPermission,
+} = require("../const/err.type");
+const { getUserInfo } = require("../service/user.service");
 
 const auth = async (ctx, next) => {
   const token = ctx.request.header["token"];
@@ -10,6 +15,7 @@ const auth = async (ctx, next) => {
 
     console.log(user);
     ctx.state.user = user;
+    await next();
   } catch (err) {
     switch (err.name) {
       case "TokenExpiredError":
@@ -20,22 +26,30 @@ const auth = async (ctx, next) => {
         return ctx.app.emit("error", invalidToken, ctx);
     }
   }
+};
+
+//用于浏览器免token测试接口
+const testEntry = async (ctx, next) => {
+  ctx.state.user = { id: 2, username: "test" };
   await next();
-}
+};
 
-const hadAdminPermission = async (ctx,next) =>{
-  //ToDo: 添加权限
-  let is_admin =true
-
-  if(!is_admin){
-    console.error("没有操作权限",ctx.state.user)
-    return ctx.app.emit('error',hasNotAdminPermission,ctx)
+//管理员权限
+const hadAdminPermission = async (ctx, next) => {
+  const { id } = ctx.state.user;
+  const res = await getUserInfo(id);
+  if (res.role != "admin") {
+    const error = ctx.state.user.name + "没有操作权限!";
+    console.log(error);
+    hasNotAdminPermission.result = error;
+    return ctx.app.emit("error", hasNotAdminPermission, ctx);
   }
 
-  await next()
-}
+  await next();
+};
 
 module.exports = {
   auth,
+  testEntry,
   hadAdminPermission,
 };

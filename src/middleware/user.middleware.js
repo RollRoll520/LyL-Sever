@@ -9,11 +9,12 @@ const {
   oldPasswordError,
   userDoesNotExist,
   passwordUpdateError,
+  userInviteError,
 } = require("../const/err.type");
 
 const userRegisterValidator = async (ctx, next) => {
-  const { username, password, email } = ctx.request.body;
-  if (!username || !password || !email) {
+  const { username, password, email, invite } = ctx.request.body;
+  if (!username || !password || !email || !invite) {
     console.error("用户信息不完整", ctx.request.body);
     ctx.app.emit("error", userFormatError, ctx);
     return;
@@ -48,6 +49,26 @@ const confirmUser = async (ctx, next) => {
   await next();
 };
 
+const confirmInvitation = async (ctx, next) => {
+  const { invite } = ctx.request.body;
+  switch (invite) {
+    case "invite_admin":
+      ctx.state.role = "admin";
+      break;
+    case "invite_teacher":
+      ctx.state.role = "teacher";
+      break;
+    case "invite_regular":
+      ctx.state.role = "regular";
+      break;
+    default:
+      console.log("邀请码错误");
+      return ctx.app.emit("error", userInviteError, ctx);
+  }
+
+  await next();
+};
+
 const crpyPassword = async (ctx, next) => {
   const { password } = ctx.request.body;
   const salt = bcrypt.genSaltSync(10);
@@ -66,11 +87,11 @@ const confirmOldPassword = async (ctx, next) => {
       ctx.app.emit("error", oldPasswordError, ctx);
       return;
     }
+    await next();
   } catch (err) {
     console.error(err);
     ctx.app.emit("error", passwordUpdateError, ctx);
   }
-  await next();
 };
 
 const confirmUserLogin = async (ctx, next) => {
@@ -100,6 +121,7 @@ module.exports = {
   userRegisterValidator,
   userLoginValidator,
   confirmUser,
+  confirmInvitation,
   crpyPassword,
   confirmUserLogin,
   confirmOldPassword,

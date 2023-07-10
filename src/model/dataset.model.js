@@ -9,7 +9,6 @@ const Dataset = seq.define(
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
       comment: "数据集ID",
     },
     u_id: {
@@ -41,6 +40,16 @@ const Dataset = seq.define(
       allowNull: false,
       defaultValue: DataTypes.NOW,
       comment: "数据集上传时间",
+    },
+    remark: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: "数据集备注",
+    },
+    state: {
+      type: DataTypes.ENUM("isWaiting", "isFinished", "isExpired"),
+      allowNull: false,
+      comment: "数据集状态",
     },
   },
   {

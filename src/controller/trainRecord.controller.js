@@ -33,30 +33,29 @@ class TrainRecordController {
 
       const timeDiffInMs = res.end_time - res.start_time;
       ctx.state.duration = timeDiffInMs / 1000;
+      await next();
     } catch (err) {
       console.log(err);
       updateTrainRecordError.result = err;
       ctx.app.emit("error", updateTrainRecordError, ctx);
     }
-    await next();
   }
   async findTrainRecordByUid(ctx, next) {
     const { id: u_id } = ctx.state.user;
     try {
       const res = await getUserTrainRecords(u_id);
-      console.log(res);
       ctx.body = {
         code: 0,
         message: "获取训练记录成功",
         result: res,
         count: res.length,
       };
+      await next();
     } catch (err) {
       console.log(err);
       getTrainRecordError.result = err;
       ctx.app.emit("error", getTrainRecordError, ctx);
     }
-    await next();
   }
 }
 

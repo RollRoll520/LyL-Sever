@@ -40,6 +40,11 @@ module.exports = {
     message: "原密码错误",
     result: "",
   },
+  userInviteError: {
+    code: "10009",
+    message: "邀请码错误",
+    result: "",
+  },
   tokenExpiredError: {
     code: "10101",
     message: "token已过期",
@@ -81,6 +86,27 @@ module.exports = {
     message: "寻找测试集错误",
     result: "",
   },
+  updateDatasetStateError: {
+    code: "10206",
+    message: "修改数据集状态错误",
+    result: "",
+  },
+  updateDatasetRemarkError: {
+    code: "10207",
+    message: "修改数据集备注错误",
+    result: "",
+  },
+  unlinkDatasetError: {
+    code: "10208",
+    message: "删除数据集错误",
+    result: "",
+  },
+  unlinkDatasetFormatError: {
+    code: "10209",
+    message: "删除数据集参数错误",
+    result: "",
+  },
+  //model service
   modelTestError: {
     code: "10301",
     message: "在线测试错误",
@@ -95,6 +121,26 @@ module.exports = {
     code: "10303",
     message: "下载模型错误",
     result: "",
+  },
+  trainModelFormatError: {
+    code: "10304",
+    message: "训练模型参数错误",
+    result: "",
+  },
+  defaultTestFormatError: {
+    code: "10305",
+    message: "默认测试参数错误",
+    result: "",
+  },
+ customTestFormatError: {
+    code: "10306",
+    message: "自定义测试参数错误",
+    result: "",
+  },
+  getCustomModelError:{
+    code: "10307",
+    message: "获取自定义模型错误",
+    result:"",
   },
   //record
   testRecordFormatError: {

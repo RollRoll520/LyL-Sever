@@ -31,6 +31,11 @@ const TrainResult = seq.define(
       allowNull: false,
       comment: "模型训练生成的模型文件所在路径",
     },
+    isExpired:{
+      type: DataTypes.TINYINT(1),
+      allowNull: false,
+      comment:"模型是否过期"
+    }
   },
   {
     timestamps: false,

@@ -3,8 +3,8 @@ const { testRecordFormatError } = require("../const/err.type");
 const testRecordValidator = async (ctx, next) => {
   try {
     ctx.verifyParams({
-      dataset_id: { type: "integer", required: false },
-      u_id: { type: "integer", required: false },
+      dataset_id: { type: "id", required: false },
+      u_id: { type: "id", required: false },
     });
   } catch (err) {
     console.error(err);

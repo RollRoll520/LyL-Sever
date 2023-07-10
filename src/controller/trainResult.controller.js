@@ -12,7 +12,8 @@ const {
 
 class TrainResult {
   async createTrainResult(ctx, next) {
-    const { record_id, model_name, model_path, duration } = ctx.state;
+    const { record_id, model_path, duration } = ctx.state;
+    const {model_name} = ctx.request.body;
     try {
       const res = await addTrainResult(record_id, model_name, model_path);
       ctx.body = {
@@ -22,12 +23,12 @@ class TrainResult {
         duration: `${duration.toFixed(2)}`,
         resultModelName: res.modelName,
       };
+    await next();
     } catch (err) {
       console.log(err);
       createTrainResultError.result = err;
       ctx.app.emit("error", createTrainResultError, ctx);
     }
-    await next();
   }
 
   async getUserTrainResult(ctx, next) {
@@ -57,12 +58,12 @@ class TrainResult {
         getTrainResultError.result = "训练模型不存在或不属于当前用户！";
         ctx.app.emit("error", getTrainResultError, ctx);
       }
+    await next();
     } catch (err) {
       console.log(err);
       getTrainResultError.result = err;
       ctx.app.emit("error", getTrainResultError, ctx);
     }
-    await next();
   }
 }
 

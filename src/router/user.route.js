@@ -13,6 +13,7 @@ const {
   crpyPassword,
   confirmUserLogin,
   confirmOldPassword,
+  confirmInvitation,
 } = require("../middleware/user.middleware");
 
 const router = new Router({ prefix: "/user" });
@@ -22,6 +23,7 @@ router.post(
   "/register",
   userRegisterValidator,
   confirmUser,
+  confirmInvitation,
   crpyPassword,
   register
 );
@@ -29,7 +31,7 @@ router.post(
 // 登录接口
 router.post("/login", userLoginValidator, confirmUserLogin, login);
 
-// 修改用户信息接口
+// 修改用户信息(只有邮箱)接口
 router.patch("/updateInfo", auth, update);
 
 //修改密码接口

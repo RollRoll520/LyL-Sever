@@ -27,6 +27,11 @@ const User = seq.define(
       allowNull: false,
       comment: "用户电子邮件",
     },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: "用户身份",
+    },
     register_time: {
       type: DataTypes.DATE,
       allowNull: false,

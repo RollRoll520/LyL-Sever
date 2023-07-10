@@ -10,7 +10,7 @@ class TrainResultService {
     return result.dataValues;
   }
   async getTrainResultsByRecordId(record_id) {
-    const results = await TrainResult.findAll({
+    const results = await TrainResult.findOne({
       where: { train_record_id: record_id },
       raw: true,
     });
