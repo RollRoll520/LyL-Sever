@@ -1,7 +1,12 @@
 const path = require("path");
 const fs = require("fs");
 const { runPythonScript } = require("../service/model.service");
-const { modelTestError, modelTrainError, getCustomModelError } = require("../const/err.type");
+const {
+  modelTestError,
+  modelTrainError,
+  getCustomModelError,
+  downloadModelError,
+} = require("../const/err.type");
 const {
   DEFAULT_MODEL_PATH,
   TEST_PYTHON_PATH,
@@ -110,7 +115,8 @@ class ModelController {
 
     const resultDir = path.join(
       __dirname,
-      TEST_RESULT_DIR,`${u_id}_${username}`
+      TEST_RESULT_DIR,
+      `${u_id}_${username}`
     ); // 测试结果文件路径
     if (!fs.existsSync(resultDir)) {
       fs.mkdirSync(resultDir);
@@ -140,20 +146,20 @@ class ModelController {
     }
   }
 
-  async getCustomModel(ctx,next){
-    const {train_record_id} = ctx.request.body;
-    try{
+  async getCustomModel(ctx, next) {
+    const { train_record_id } = ctx.request.body;
+    try {
       const res = await getTrainResultsByRecordId(train_record_id);
       console.log(res);
       // await next();
-    }catch(err){
+    } catch (err) {
       console.log(err);
-      getCustomModelError.result= err;
-      return ctx.app.emit("error",getCustomModelError,ctx);
+      getCustomModelError.result = err;
+      return ctx.app.emit("error", getCustomModelError, ctx);
     }
   }
 
-  async getModel(ctx, next) {
+  async downloadDefaultModel(ctx, next) {
     const filepath = path.join(__dirname, DEFAULT_MODEL_PATH);
 
     const stat = fs.statSync(filepath);
@@ -170,6 +176,31 @@ class ModelController {
     ctx.body = fs.createReadStream(filepath);
 
     await next();
+  }
+
+  async downloadCustomModel(ctx, next) {
+    const { train_record_id } = ctx.params;
+    try {
+      const res = await getTrainResultsByRecordId(train_record_id);
+      const filepath = res.modelPath;
+
+      const stat = fs.statSync(filepath);
+
+      ctx.set("Content-Type", "application/octet-stream");
+      ctx.set(
+        "Content-Disposition",
+        `attachment; filename="${path.basename(filepath)}"`
+      );
+      ctx.set("Content-Length", stat.size);
+
+      ctx.body = fs.createReadStream(filepath);
+
+      await next();
+    } catch (err) {
+      console.log(err);
+      downloadModelError.result = err;
+      ctx.app.emit("error",downloadModelError,ctx);
+    }
   }
 }
 

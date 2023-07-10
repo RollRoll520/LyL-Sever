@@ -132,15 +132,25 @@ module.exports = {
     message: "默认测试参数错误",
     result: "",
   },
- customTestFormatError: {
+  customTestFormatError: {
     code: "10306",
     message: "自定义测试参数错误",
     result: "",
   },
-  getCustomModelError:{
+  getCustomModelError: {
     code: "10307",
     message: "获取自定义模型错误",
-    result:"",
+    result: "",
+  },
+  downloadModelFormatError: {
+    code: "10308",
+    message: "下载模型参数错误",
+    result: "",
+  },
+  downloadModelError: {
+    code: "10309",
+    message: "下载模型错误",
+    result: "",
   },
   //record
   testRecordFormatError: {

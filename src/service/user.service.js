@@ -1,5 +1,4 @@
 const User = require("../model/user.model");
-const bcrypt = require("bcryptjs");
 
 class UserService {
   // 创建用户

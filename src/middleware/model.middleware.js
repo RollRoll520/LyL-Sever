@@ -4,6 +4,7 @@ const {
   trainModelFormatError,
   customTestFormatError,
   defaultTestFormatError,
+  downloadModelFormatError,
 } = require("../const/err.type");
 const { findDatasetById } = require("../service/dataset.service");
 
@@ -111,10 +112,24 @@ const customTestValidator = async (ctx, next) => {
   }
 };
 
+const getModelValidator = async (ctx, next) => {
+  try {
+    ctx.verifyParams({
+      train_record_id: { type: "id", required: true },
+    });
+    await next();
+  } catch (err) {
+    console.error(err);
+    downloadModelFormatErrorModelFormatError.result = err;
+    return ctx.app.emit("error", downloadModelFormatError, ctx);
+  }
+};
+
 module.exports = {
   getTestSetInfo,
   getTrainSetInfo,
   trainValidator,
   defaultTestValidator,
   customTestValidator,
+  getModelValidator,
 };

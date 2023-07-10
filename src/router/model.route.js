@@ -3,9 +3,10 @@ const { auth } = require("../middleware/auth.middleware");
 const {
   trainModel,
   testDefaultModel,
-  getModel,
   testCustomModel,
   getCustomModel,
+  downloadDefaultModel,
+  downloadCustomModel,
 } = require("../controller/model.controller");
 const {
   getTestSetInfo,
@@ -13,6 +14,7 @@ const {
   trainValidator,
   defaultTestValidator,
   customTestValidator,
+  getModelValidator,
 } = require("../middleware/model.middleware");
 const {
   createTrainRecord,
@@ -68,6 +70,7 @@ router.post(
 );
 
 //获取默认模型
-router.get("/download", auth, getModel);
+router.get("/getDefault", auth, downloadDefaultModel);
+router.get("/getCustom/:train_record_id", auth, getModelValidator,downloadCustomModel);
 
 module.exports = router;
