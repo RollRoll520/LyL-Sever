@@ -31,7 +31,7 @@ const Dataset = seq.define(
       comment: "数据集路径",
     },
     type: {
-      type: DataTypes.ENUM("test", "train"),
+      type: DataTypes.ENUM("single_test", "mul_test", "train", "validate"),
       allowNull: false,
       comment: "数据集类型",
     },

@@ -3,6 +3,7 @@ const {
   getUserInfo,
   updateUser,
   updatePassword,
+  getUserInfoByUsername,
 } = require("../service/user.service");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -15,17 +16,19 @@ const {
   passwordUpdateError,
 } = require("../const/err.type");
 const { JWT_SECRET } = require("../config/config.default");
+const { consumeInvite } = require("../service/invite.service");
 
 class UserController {
   async register(ctx, next) {
     // 1. 获取数据
-    const { username, password, email } = ctx.request.body;
+    const { username, password, email,code } = ctx.request.body;
     const {role} = ctx.state
     // 2. 操作数据库
     try {
       const res = await createUser(username, password, email,role);
       console.log(res);
-
+      const res1 = await consumeInvite(code,res.id);
+      console.log(res1)
       // 3. 返回结果
       ctx.body = {
         code: 0,
@@ -47,7 +50,7 @@ class UserController {
 
     // 1. 获取用户信息，在token的payload中记录id、user_name
     try {
-      const res = await getUserInfo({ username });
+      const res = await getUserInfoByUsername(username);
       // 1. 判断用户名是否存在，不存在报错
       if (!res) {
         console.error("用户名不存在", { username });

@@ -1,16 +1,20 @@
 const bcrypt = require("bcryptjs");
-const { getUserInfo } = require("../service/user.service");
+const {
+  getUserInfo,
+  getUserInfoByUsername,
+} = require("../service/user.service");
 const {
   userFormatError,
   userAlreadyExist,
   userRegisterError,
   userLoginError,
-  invalidPassword,
+  invalidPasswordError,
   oldPasswordError,
   userDoesNotExist,
   passwordUpdateError,
   userInviteError,
 } = require("../const/err.type");
+const { getInviteInfo } = require("../service/invite.service");
 
 const userRegisterValidator = async (ctx, next) => {
   const { username, password, email, invite } = ctx.request.body;
@@ -51,22 +55,20 @@ const confirmUser = async (ctx, next) => {
 
 const confirmInvitation = async (ctx, next) => {
   const { invite } = ctx.request.body;
-  switch (invite) {
-    case "invite_admin":
-      ctx.state.role = "admin";
-      break;
-    case "invite_teacher":
-      ctx.state.role = "teacher";
-      break;
-    case "invite_regular":
-      ctx.state.role = "regular";
-      break;
-    default:
-      console.log("邀请码错误");
-      return ctx.app.emit("error", userInviteError, ctx);
+  try {
+    const res = await getInviteInfo(invite);
+    if (res && res.available) {
+      ctx.state.role = res.role;
+      await next();
+    } else {
+      const error = "邀请码不存在或已使用！";
+      throw error;
+    }
+  } catch (err) {
+    console.log(err);
+    userInviteError.result = err;
+    ctx.app.emit("error", userInviteError, ctx);
   }
-
-  await next();
 };
 
 const crpyPassword = async (ctx, next) => {
@@ -81,7 +83,7 @@ const confirmOldPassword = async (ctx, next) => {
   const { id } = ctx.state.user;
   const { oldPassword } = ctx.request.body;
   try {
-    const res = await getUserInfo({ id });
+    const res = await getUserInfo(id);
     if (!bcrypt.compareSync(oldPassword, res.password)) {
       console.log(oldPassword, res.password);
       ctx.app.emit("error", oldPasswordError, ctx);
@@ -97,7 +99,7 @@ const confirmOldPassword = async (ctx, next) => {
 const confirmUserLogin = async (ctx, next) => {
   const { username, password } = ctx.request.body;
   try {
-    const res = await getUserInfo({ username });
+    const res = await getUserInfoByUsername(username);
     // 1. 判断用户名是否存在，不存在报错
     if (!res) {
       console.error("用户名不存在", { username });
@@ -107,7 +109,7 @@ const confirmUserLogin = async (ctx, next) => {
     // 2. 判断密码是否正确，否则报错
     if (!bcrypt.compareSync(password, res.password)) {
       console.log(password, res.password);
-      ctx.app.emit("error", invalidPassword, ctx);
+      ctx.app.emit("error", invalidPasswordError, ctx);
       return;
     }
   } catch (err) {

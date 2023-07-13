@@ -3,8 +3,6 @@ const seq = require("../database/seq.mysql");
 const Dataset = require("./dataset.model");
 const User = require("./user.model");
 
-
-
 // TrainRecord 训练记录表
 const TrainRecord = seq.define(
   "TrainRecord",
@@ -32,6 +30,17 @@ const TrainRecord = seq.define(
         model: User,
         key: "id",
       },
+    },
+    isExpired: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      comment: "训练记录是否已失效",
+    },
+    remark: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: "训练记录备注",
     },
     start_time: {
       type: DataTypes.DATE,

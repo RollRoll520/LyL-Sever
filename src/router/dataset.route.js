@@ -7,19 +7,25 @@ const {
 const {
   createDataset,
   upload,
-  getTestSet,
   getTrainSet,
   unlinkDataset,
   datasetState2isExpired,
+  getSingleTestSet,
+  getMultipleTestSet,
+  getValidateSet,
 } = require("../controller/dataset.controller");
 
 const router = new Router({ prefix: "/dataset" });
 
 router.post("/new", auth, datasetValidator, upload, createDataset);
 
-router.get("/getTest", auth, getTestSet);
+router.get("/get_single_test", auth, getSingleTestSet);
 
-router.get("/getTrain", auth, getTrainSet);
+router.get("/get_multiple_test",auth,getMultipleTestSet);
+
+router.get("/get_train", auth, getTrainSet);
+
+router.get("/get_validate",auth,getValidateSet);
 
 router.post("/unlink", auth, unlinkDatasetValidator,unlinkDataset, datasetState2isExpired);
 

@@ -21,21 +21,36 @@ const TrainResult = seq.define(
         key: "id",
       },
     },
-    modelName: {
+    model_name: {
       type: DataTypes.STRING,
       allowNull: false,
       comment: "模型训练生成的模型文件名",
     },
-    modelPath: {
+    model_path: {
       type: DataTypes.STRING,
       allowNull: false,
       comment: "模型训练生成的模型文件所在路径",
     },
-    isExpired:{
-      type: DataTypes.TINYINT(1),
+    train_report_path: {
+      type: DataTypes.STRING,
       allowNull: false,
-      comment:"模型是否过期"
-    }
+      comment: "训练集报告数据",
+    },
+    train_heat_path: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: "训练集热力图数据",
+    },
+    validate_report_path: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: "验证集报告数据",
+    },
+    validate_heat_path: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: "验证集热力图数据",
+    },
   },
   {
     timestamps: false,

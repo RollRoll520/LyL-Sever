@@ -52,6 +52,11 @@ class UserService {
     const user = await User.findOne({ where: { id } });
     return user.dataValues;
   }
+
+  async getUserInfoByUsername(username) {
+    const user = await User.findOne({ where: { username:username } });
+    return user?user.dataValues:null;
+  }
 }
 
 module.exports = new UserService();

@@ -5,7 +5,7 @@ const { getUserTrainResult } = require("../controller/trainResult.controller");
 
 const router = new Router({ prefix: "/result" });
 
-router.get("/getTest/:record_id",auth,  getUserTestResult);
+router.get("/getTest/:record_id",testEntry,  getUserTestResult);
 router.get("/getTrain/:record_id",testEntry, getUserTrainResult);
 
 module.exports = router;

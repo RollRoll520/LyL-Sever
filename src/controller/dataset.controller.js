@@ -4,13 +4,17 @@ const path = require("path");
 const {
   datasetCreateError,
   datasetFormatError,
-  findTestSetError,
   findTrainSetError,
   updateDatasetStateError,
   unlinkDatasetError,
+  findValidateSetError,
+  findSingleTestSetError,
+  findMultipleTestSetError,
 } = require("../const/err.type");
 const {
-  TEST_DATASET_DIR,
+  SINGLE_TEST_DIR,
+  MULTIPLE_TEST_DIR,
+  VALIDATE_DATASET_DIR,
   TRAIN_DATASET_DIR,
 } = require("../config/config.default");
 const { getUserInfo } = require("../service/user.service");
@@ -35,8 +39,12 @@ class DatasetController {
 
     // 将文件保存到指定目录下
     const targetDir =
-      type == "test"
-        ? path.join(__dirname, TEST_DATASET_DIR, `${u_id}_${username}`)
+      type == "single_test"
+        ? path.join(__dirname, SINGLE_TEST_DIR, `${u_id}_${username}`)
+        : type == "mul_test"
+        ? path.join(__dirname, MULTIPLE_TEST_DIR, `${u_id}_${username}`)
+        : type == "validate"
+        ? path.join(__dirname, VALIDATE_DATASET_DIR, `${u_id}_${username}`)
         : path.join(__dirname, TRAIN_DATASET_DIR, `${u_id}_${username}`);
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir);
@@ -124,7 +132,7 @@ class DatasetController {
       id,
       u_id,
       type,
-      filename: path.basename(filePath),
+      filename: path.basename(filePath), //todo:删除该字段
       path: filePath,
       remark,
       state: "isWaiting",
@@ -153,21 +161,39 @@ class DatasetController {
     }
   }
 
-  async getTestSet(ctx, next) {
+  async getSingleTestSet(ctx, next) {
     const { id: u_id } = ctx.state.user;
     try {
-      const res = await datasetService.findDatasetsByUidAndType(u_id, "test");
+      const res = await datasetService.findDatasetsByUidAndType(u_id, "single_test");
       ctx.body = {
         code: 0,
-        message: "获取测试数据集成功",
+        message: "获取单条测试集成功",
         result: res,
         count: res.length,
       };
       await next();
     } catch (err) {
       console.log(err);
-      findTestSetError.result = err;
-      ctx.app.emit("error", findTestSetError, ctx);
+      findSingleTestSetError.result = err;
+      ctx.app.emit("error", findSingleTestSetError, ctx);
+    }
+  }
+
+  async getMultipleTestSet(ctx, next) {
+    const { id: u_id } = ctx.state.user;
+    try {
+      const res = await datasetService.findDatasetsByUidAndType(u_id, "multiple_test");
+      ctx.body = {
+        code: 0,
+        message: "获取多条测试集成功",
+        result: res,
+        count: res.length,
+      };
+      await next();
+    } catch (err) {
+      console.log(err);
+      findMultipleTestSetError.result = err;
+      ctx.app.emit("error", findMultipleTestSetError, ctx);
     }
   }
 
@@ -186,6 +212,27 @@ class DatasetController {
       console.log(err);
       findTrainSetError.result = err;
       ctx.app.emit("error", findTrainSetError, ctx);
+    }
+  }
+
+  async getValidateSet(ctx, next) {
+    const { id: u_id } = ctx.state.user;
+    try {
+      const res = await datasetService.findDatasetsByUidAndType(
+        u_id,
+        "validate"
+      );
+      ctx.body = {
+        code: 0,
+        message: "获取验证数据集成功",
+        result: res,
+        count: res.length,
+      };
+      await next();
+    } catch (err) {
+      console.log(err);
+      findValidateSetError.result = err;
+      ctx.app.emit("error", findValidateSetError, ctx);
     }
   }
 
@@ -208,9 +255,12 @@ class DatasetController {
   }
 
   async datasetState2isFinished(ctx, next) {
-    const {dataset_id} = ctx.state;
+    const { dataset_id } = ctx.state;
     try {
-      const res = await datasetService.updateDatasetState(dataset_id, "isFinished");
+      const res = await datasetService.updateDatasetState(
+        dataset_id,
+        "isFinished"
+      );
       await next();
     } catch (err) {
       console.log(err);

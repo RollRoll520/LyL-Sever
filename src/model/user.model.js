@@ -28,7 +28,7 @@ const User = seq.define(
       comment: "用户电子邮件",
     },
     role: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM("member","premium","teacher","admin"),
       allowNull: false,
       comment: "用户身份",
     },

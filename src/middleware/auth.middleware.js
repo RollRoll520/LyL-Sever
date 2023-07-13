@@ -30,7 +30,7 @@ const auth = async (ctx, next) => {
 
 //用于浏览器免token测试接口
 const testEntry = async (ctx, next) => {
-  ctx.state.user = { id: 2, username: "test" };
+  ctx.state.user = { id: 1, username: "test" };
   await next();
 };
 

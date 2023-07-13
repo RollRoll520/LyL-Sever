@@ -31,6 +31,23 @@ const TestRecord = seq.define(
         key: "id",
       },
     },
+    mode: {
+      type: DataTypes.ENUM("single", "multiple"),
+      defaultValue: "single",
+      allowNull: false,
+      comment: "测试模式",
+    },
+    isExpired: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      comment: "测试记录是否有效",
+    },
+    remark: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: "测试记录备注",
+    },
     start_time: {
       type: DataTypes.DATE,
       allowNull: false,

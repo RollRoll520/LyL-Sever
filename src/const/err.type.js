@@ -45,6 +45,12 @@ module.exports = {
     message: "邀请码错误",
     result: "",
   },
+  invalidPasswordError: {
+    code: "10010",
+    message: "密码错误",
+    result: "",
+  },
+  //token
   tokenExpiredError: {
     code: "10101",
     message: "token已过期",
@@ -81,28 +87,37 @@ module.exports = {
     message: "寻找训练集错误",
     result: "",
   },
-  findTestSetError: {
+  findValidateSetError: {
     code: "10205",
-    message: "寻找测试集错误",
+    message: "寻找验证集错误",
     result: "",
   },
-  updateDatasetStateError: {
+  findSingleTestSetError: {
     code: "10206",
+    message: "寻找单条测试集错误",
+    result: "",
+  },
+  findMultipleTestSetError: {
+    code: "10207",
+    message: "寻找多条测试集错误",
+  },
+  updateDatasetStateError: {
+    code: "10208",
     message: "修改数据集状态错误",
     result: "",
   },
   updateDatasetRemarkError: {
-    code: "10207",
+    code: "10209",
     message: "修改数据集备注错误",
     result: "",
   },
   unlinkDatasetError: {
-    code: "10208",
+    code: "10210",
     message: "删除数据集错误",
     result: "",
   },
   unlinkDatasetFormatError: {
-    code: "10209",
+    code: "10211",
     message: "删除数据集参数错误",
     result: "",
   },
