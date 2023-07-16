@@ -1,5 +1,5 @@
 const Router = require("koa-router");
-const { auth } = require("../middleware/auth.middleware");
+const { auth, testEntry } = require("../middleware/auth.middleware");
 const {
   trainModel,
   testDefaultModel,
@@ -26,7 +26,7 @@ const {
 } = require("../controller/testRecord.controller");
 const { createTestResult } = require("../controller/testResult.controller");
 const { createTrainResult } = require("../controller/trainResult.controller");
-const { datasetState2isFinished } = require("../controller/dataset.controller");
+const { datasetState2isFinished, trainSetState2isFinished } = require("../controller/dataset.controller");
 
 const router = new Router({ prefix: "/model" });
 
@@ -38,7 +38,7 @@ router.post(
   createTrainRecord,
   trainModel,
   updateTrainRecord,
-  datasetState2isFinished,
+  trainSetState2isFinished,
   createTrainResult
 );
 
@@ -70,7 +70,7 @@ router.post(
 );
 
 //获取默认模型
-router.get("/getDefault", auth, downloadDefaultModel);
-router.get("/getCustom/:train_record_id", auth, getModelValidator,downloadCustomModel);
+router.get("/get_default", auth, downloadDefaultModel);
+router.get("/get_custom/:train_record_id", auth, getModelValidator,downloadCustomModel);
 
 module.exports = router;

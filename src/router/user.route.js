@@ -32,9 +32,9 @@ router.post(
 router.post("/login", userLoginValidator, confirmUserLogin, login);
 
 // 修改用户信息(只有邮箱)接口
-router.patch("/updateInfo", auth, update);
+router.patch("/update_info", auth, update);
 
 //修改密码接口
-router.patch("/updatePsw", auth, confirmOldPassword, crpyPassword, updatePsw);
+router.patch("/update_password", auth, confirmOldPassword, crpyPassword, updatePsw);
 
 module.exports = router;

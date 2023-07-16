@@ -10,9 +10,9 @@ const { findDatasetById } = require("../service/dataset.service");
 
 const getTrainSetInfo = async (ctx, next) => {
   try {
-    const { dataset_id } = ctx.request.body;
+    const { train_set_id, validate_set_id } = ctx.request.body;
     const { id } = ctx.state.user;
-    const res = await findDatasetById(dataset_id);
+    const res = await findDatasetById(train_set_id);
     if (res == null) {
       const error = "不存在的训练集！";
       throw error;
@@ -29,8 +29,25 @@ const getTrainSetInfo = async (ctx, next) => {
       const error = "请使用自己的训练集进行训练！";
       throw error;
     }
-    ctx.state.dataset_path = res.path;
-    ctx.state.dataset_id = res.id;
+    const res2 = await findDatasetById(validate_set_id);
+    if (res2 == null) {
+      const error = "不存在的验证集！";
+      throw error;
+    }
+    if (res2.type == "test") {
+      const error = "无法使用测试集进行训练！";
+      throw error;
+    }
+    if (res2.state == "isExpired") {
+      const error = "无法使用已失效的验证集！";
+      throw error;
+    }
+    if (id != res2.u_id) {
+      const error = "请使用自己的验证集进行训练！";
+      throw error;
+    }
+    ctx.state.train_set_path = res.path;
+    ctx.state.validate_set_path = res2.path;
     await next();
   } catch (err) {
     console.log(err);
@@ -48,8 +65,8 @@ const getTestSetInfo = async (ctx, next) => {
       const error = "不存在的测试集！";
       throw error;
     }
-    if (res.type == "train") {
-      const error = "无法使用训练集进行测试！";
+    if (res.type == "train"||res.type=="validate") {
+      const error = "无法使用训练数据进行测试！";
       throw error;
     }
     if (res.state == "isExpired") {
@@ -74,8 +91,9 @@ const getTestSetInfo = async (ctx, next) => {
 const trainValidator = async (ctx, next) => {
   try {
     ctx.verifyParams({
-      dataset_id: { type: "id", required: true },
-      model_name: { type: "string", required: true },
+      train_set_id: { type: "id", required: true },
+      validate_set_id: { type: "id", required: true },
+      remark: { type: "string", required: false },
     });
   } catch (err) {
     console.error(err);
@@ -103,6 +121,8 @@ const customTestValidator = async (ctx, next) => {
     ctx.verifyParams({
       dataset_id: { type: "id", required: true },
       train_record_id: { type: "id", required: true },
+      remark:{type:"string",require:true},
+      mode:{type:"string",require:true}
     });
     await next();
   } catch (err) {

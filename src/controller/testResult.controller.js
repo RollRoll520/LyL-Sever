@@ -4,7 +4,7 @@ const {
 } = require("../const/err.type");
 const path = require("path");
 const fs = require("fs");
-const { getUserTestRecords } = require("../service/testRecord.service");
+const { getUserTestRecords, getUserTestRecordsById } = require("../service/testRecord.service");
 const {
   addTestResult,
   getTestResultsByRecordId,
@@ -33,13 +33,13 @@ class TestResultService {
     const { id: u_id } = ctx.state.user;
     const { record_id } = ctx.params;
     try {
-      const records = await getUserTestRecords(u_id);
+      const records = await getUserTestRecordsById(u_id);
       const hasRecordId = records.some(
         (item) => item.id.toString() === record_id
       );
       if (hasRecordId) {
         const result = await getTestResultsByRecordId(record_id);
-        const result_path = result[0].path;
+        const result_path = result.path;console.log(result);
 
         const stat = fs.statSync(result_path);
         // 设置响应头，告诉浏览器响应体的类型和附件的名称
@@ -56,7 +56,7 @@ class TestResultService {
         getTestResultError.result = "测试结果不存在或不属于当前用户！";
         ctx.app.emit("error", getTestResultError, ctx);
       }
-      await next();
+      // await next();
     } catch (err) {
       console.log(err);
       getTestResultError.result = err;

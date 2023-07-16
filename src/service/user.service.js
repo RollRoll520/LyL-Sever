@@ -54,7 +54,7 @@ class UserService {
   }
 
   async getUserInfoByUsername(username) {
-    const user = await User.findOne({ where: { username:username } });
+    const user = await User.findOne({ where: { username } });
     return user?user.dataValues:null;
   }
 }

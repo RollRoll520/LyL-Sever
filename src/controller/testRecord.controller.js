@@ -11,10 +11,10 @@ const {
 
 class TestRecordController {
   async createTestRecord(ctx, next) {
-    const { dataset_id } = ctx.state;
+    const { dataset_id,remark,mode } = ctx.request.body;
     const { id: u_id } = ctx.state.user;
     try {
-      const res = await addTestRecord(dataset_id, u_id);
+      const res = await addTestRecord(dataset_id, remark,mode,u_id);
       ctx.state.record_id = res.id;
       await next();
     } catch (err) {
@@ -25,13 +25,10 @@ class TestRecordController {
   }
 
   async updateTestRecord(ctx, next) {
-    const { record_id } = ctx.state;
     try {
-      const now = new Date().getTime();
-      const res = await updateTestRecord(record_id, now);
-
-      const timeDiffInMs = res.end_time - res.start_time;
-      ctx.state.duration = timeDiffInMs / 1000;
+      const now = Date.now();
+      const res = await updateTestRecord(ctx.state.record_id, now);
+      ctx.state.duration = res;
       await next();
     } catch (err) {
       console.log(err);
@@ -42,7 +39,7 @@ class TestRecordController {
   async findTestRecordByUid(ctx, next) {
     const { id: u_id } = ctx.state.user;
     try {
-      const res = await getUserTestRecords(u_id);
+      const res = await getUserTestRecords(u_id,ctx.state.mode);
       ctx.body = {
         code: 0,
         message: "获取测试记录成功",

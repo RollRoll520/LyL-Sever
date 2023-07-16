@@ -12,18 +12,33 @@ const {
 
 class TrainResult {
   async createTrainResult(ctx, next) {
-    const { record_id, model_path, duration } = ctx.state;
-    const {model_name} = ctx.request.body;
+    const {
+      train_report_path,
+      train_heat_path,
+      validate_report_path,
+      validate_heat_path,
+      model_path,
+      duration,
+      record_id,
+    } = ctx.state;
+    const { remark } = ctx.request.body;
     try {
-      const res = await addTrainResult(record_id, model_name, model_path);
+      const res = await addTrainResult(
+        record_id,
+        model_path,
+        train_report_path,
+        train_heat_path,
+        validate_report_path,
+        validate_heat_path
+      );
       ctx.body = {
         code: 0,
         message: "模型训练成功",
         result: `训练时间:${duration.toFixed(2)} 秒`,
         duration: `${duration.toFixed(2)}`,
-        resultModelName: res.modelName,
+        resultModelName: remark,
       };
-    await next();
+      await next();
     } catch (err) {
       console.log(err);
       createTrainResultError.result = err;
@@ -41,7 +56,25 @@ class TrainResult {
       );
       if (hasRecordId) {
         const result = await getTrainResultsByRecordId(record_id);
-        const result_path = result[0].modelPath;
+        console.log(result);
+        let result_path = "";
+        switch (ctx.state.type) {
+          case "train_report":
+            result_path = result.train_report_path;
+            break;
+          case "train_heat":
+            result_path = result.train_heat_path;
+            break;
+          case "validate_report":
+            result_path = result.validate_report_path;
+            break;
+          case "validate_heat":
+            result_path = result.validate_heat_path;
+            break;
+            default:
+              const error = "type error";
+              throw error;
+        }
 
         const stat = fs.statSync(result_path);
         // 设置响应头，告诉浏览器响应体的类型和附件的名称
@@ -58,7 +91,7 @@ class TrainResult {
         getTrainResultError.result = "训练模型不存在或不属于当前用户！";
         ctx.app.emit("error", getTrainResultError, ctx);
       }
-    await next();
+      await next();
     } catch (err) {
       console.log(err);
       getTrainResultError.result = err;

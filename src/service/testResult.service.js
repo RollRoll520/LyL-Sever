@@ -10,7 +10,7 @@ class TestResultService {
     return result.dataValues;
   }
   async getTestResultsByRecordId(record_id) {
-    const results = await TestResult.findAll({
+    const results = await TestResult.findOne({
       where: { test_record_id: record_id },
       raw: true,
     });

@@ -1,8 +1,6 @@
-import argparse
 import pandas as pd
-from joblib import dump
+from joblib import dump, load
 from lgb_model import lgb_model
-import warnings
 
 def mul_train(train_set_path: str, validate_set_path: str, model_path: str,
               train_report_path: str, train_heat_path: str,
@@ -40,21 +38,38 @@ def mul_train(train_set_path: str, validate_set_path: str, model_path: str,
     # 保存模型
     dump(model, model_path)
 
-if __name__ == '__main__':
-    warnings.filterwarnings('ignore')
-    # 命令行参数解析
-    parser = argparse.ArgumentParser(description='train')
-    parser.add_argument('train_set_path', type=str)
-    parser.add_argument('validate_set_path', type=str)
-    parser.add_argument('model_path', type=str)
-    parser.add_argument('train_report_path', type=str)
-    parser.add_argument('train_heat_path', type=str)
-    parser.add_argument('validate_report_path', type=str)
-    parser.add_argument('validate_heat_path', type=str)
-    args = parser.parse_args()
+def test_model(test_set_path: str, result_file: str, model_file: str = "./trained_model.joblib"):
+    """
+    应用训练好的模型对测试样本进行结果预测。
 
-    # 调用函数
-    mul_train(args.train_set_path, args.validate_set_path, args.model_path,
-              args.train_report_path, args.train_heat_path,
-              args.validate_report_path, args.validate_heat_path
-              )
+    :param test_set_path: 测试集文件路径
+    :param result_file: 测试结果文件，以json文件形式保存
+    :param model_file:  模型文件
+    :return:
+    """
+    # 读取数据
+    data_test = pd.read_csv(test_set_path)
+
+    # 加载模型
+    model = load(model_file)
+
+    # 进行预测
+    y_test_pred = model.predict(data_test)
+
+    # 保存结果
+    model.save_preds(data_test.iloc[:, 0], y_test_pred, result_file)
+
+
+dataset_path = '../static/train_10000.csv'
+validata_set_path = '../static/validate_1000.csv'
+test_set_path = '../static/test_2000_x.csv'
+
+model_path = '../static/model/model1.joblib'
+train_report_path = '../static/report/report_train.json'
+validata_report_path = '../static/report/report_val.json'
+train_heat_path = '../static/heat/heat_heat_train.json'
+validata_heat_path = '../static/heat/heat_val.json'
+
+
+# mul_train(dataset_path, validata_set_path, model_path, train_report_path, train_heat_path, validata_report_path, validata_heat_path)
+test_model(validata_set_path, '../static/result/valid.json', model_path)

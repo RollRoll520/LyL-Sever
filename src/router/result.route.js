@@ -5,7 +5,42 @@ const { getUserTrainResult } = require("../controller/trainResult.controller");
 
 const router = new Router({ prefix: "/result" });
 
-router.get("/getTest/:record_id",testEntry,  getUserTestResult);
-router.get("/getTrain/:record_id",testEntry, getUserTrainResult);
+router.get("/get_test/:record_id", auth, getUserTestResult);
+router.get(
+  "/get_train_heat/:record_id",
+  auth,
+  async (ctx, next) => {
+    ctx.state.type = "train_heat";
+    await next();
+  },
+  getUserTrainResult
+);
+router.get(
+  "/get_train_report/:record_id",
+  auth,
+  async (ctx, next) => {
+    ctx.state.type = "train_report";
+    await next();
+  },
+  getUserTrainResult
+);
+router.get(
+  "/get_validate_report/:record_id",
+  auth,
+  async (ctx, next) => {
+    ctx.state.type = "validate_report";
+    await next();
+  },
+  getUserTrainResult
+);
+router.get(
+  "/get_validate_heat/:record_id",
+  auth,
+  async (ctx, next) => {
+    ctx.state.type = "validate_heat";
+    await next();
+  },
+  getUserTrainResult
+);
 
 module.exports = router;

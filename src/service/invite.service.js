@@ -9,10 +9,10 @@ class InviteService {
       },
       raw: true,
     });
-    return code ? res : null;
+    return res ? res : null;
   }
 
-  async consumeInvite(code, u_id) {
+  async consumeInvite(code, u_id,used_time) {
     const invite = await Invite.findOne({
       where: { code: code },
     });

@@ -22,59 +22,65 @@ const { getUserInfo } = require("../service/user.service");
 class DatasetController {
   //上传数据集
   async upload(ctx, next) {
-    const { id: u_id, username } = ctx.state.user;
-    const { type } = ctx.request.body;
+    try {
+      const { id: u_id, username } = ctx.state.user;
+      const { type } = ctx.request.body;
 
-    // 1. 获取上传文件的信息
-    const tempFile = ctx.request.files.dataset;
+      // 1. 获取上传文件的信息
+      const tempFile = ctx.request.files.dataset;
 
-    // 2. 校验文件格式
-    const extname = path.extname(tempFile.originalFilename).toLowerCase();
-    if (extname !== ".csv") {
-      console.error("上传文件格式不正确");
-      ctx.app.emit("error", datasetFormatError, ctx);
-      reject(null);
-      return;
+      // 2. 校验文件格式
+      const extname = path.extname(tempFile.originalFilename).toLowerCase();
+      if (extname !== ".csv") {
+        console.error("上传文件格式不正确");
+        ctx.app.emit("error", datasetFormatError, ctx);
+        reject(null);
+        return;
+      }
+
+      // 将文件保存到指定目录下
+      const targetDir =
+        type == "single_test"
+          ? path.join(__dirname, SINGLE_TEST_DIR, `${u_id}_${username}`)
+          : type == "mul_test"
+          ? path.join(__dirname, MULTIPLE_TEST_DIR, `${u_id}_${username}`)
+          : type == "validate"
+          ? path.join(__dirname, VALIDATE_DATASET_DIR, `${u_id}_${username}`)
+          : path.join(__dirname, TRAIN_DATASET_DIR, `${u_id}_${username}`);
+      if (!fs.existsSync(targetDir)) {
+        fs.mkdirSync(targetDir);
+      }
+      const now = new Date();
+
+      // 格式化当前时间为指定的字符串格式
+      const formattedTimeStr = now
+        .toLocaleString("en-US", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        })
+        .match(/\d+/g) // 匹配连续的数字
+        .join(""); // 将数字拼接成一个字符串
+
+      const targetPath = path.join(
+        targetDir,
+        `${username}_${formattedTimeStr}.csv`
+      );
+      fs.renameSync(tempFile.filepath, targetPath);
+
+      ctx.state.path = targetPath;
+      console.log(targetPath);
+
+      await next();
+    } catch (err) {
+      console.log(err);
+      datasetCreateError.result = err;
+      return ctx.app.emit("error", datasetCreateError, ctx);
     }
-
-    // 将文件保存到指定目录下
-    const targetDir =
-      type == "single_test"
-        ? path.join(__dirname, SINGLE_TEST_DIR, `${u_id}_${username}`)
-        : type == "mul_test"
-        ? path.join(__dirname, MULTIPLE_TEST_DIR, `${u_id}_${username}`)
-        : type == "validate"
-        ? path.join(__dirname, VALIDATE_DATASET_DIR, `${u_id}_${username}`)
-        : path.join(__dirname, TRAIN_DATASET_DIR, `${u_id}_${username}`);
-    if (!fs.existsSync(targetDir)) {
-      fs.mkdirSync(targetDir);
-    }
-    const now = new Date();
-
-    // 格式化当前时间为指定的字符串格式
-    const formattedTimeStr = now
-      .toLocaleString("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      })
-      .match(/\d+/g) // 匹配连续的数字
-      .join(""); // 将数字拼接成一个字符串
-
-    const targetPath = path.join(
-      targetDir,
-      `${username}_${formattedTimeStr}.csv`
-    );
-    fs.renameSync(tempFile.filepath, targetPath);
-
-    ctx.state.path = targetPath;
-    console.log(targetPath);
-
-    await next();
   }
 
   async unlinkDataset(ctx, next) {
@@ -164,7 +170,10 @@ class DatasetController {
   async getSingleTestSet(ctx, next) {
     const { id: u_id } = ctx.state.user;
     try {
-      const res = await datasetService.findDatasetsByUidAndType(u_id, "single_test");
+      const res = await datasetService.findDatasetsByUidAndType(
+        u_id,
+        "single_test"
+      );
       ctx.body = {
         code: 0,
         message: "获取单条测试集成功",
@@ -182,7 +191,10 @@ class DatasetController {
   async getMultipleTestSet(ctx, next) {
     const { id: u_id } = ctx.state.user;
     try {
-      const res = await datasetService.findDatasetsByUidAndType(u_id, "multiple_test");
+      const res = await datasetService.findDatasetsByUidAndType(
+        u_id,
+        "mul_test"
+      );
       ctx.body = {
         code: 0,
         message: "获取多条测试集成功",
@@ -254,13 +266,25 @@ class DatasetController {
     }
   }
 
-  async datasetState2isFinished(ctx, next) {
-    const { dataset_id } = ctx.state;
+  async trainSetState2isFinished(ctx, next) {
+    const { train_set_id, validate_set_id } = ctx.request.body;
+
     try {
-      const res = await datasetService.updateDatasetState(
-        dataset_id,
-        "isFinished"
-      );
+      await datasetService.updateDatasetState(train_set_id, "isFinished");
+      await datasetService.updateDatasetState(validate_set_id, "isFinished");
+      await next();
+    } catch (err) {
+      console.log(err);
+      updateDatasetStateError.result = err;
+      ctx.app.emit("error", updateDatasetStateError, ctx);
+    }
+  }
+
+  async datasetState2isFinished(ctx, next) {
+    const { dataset_id } = ctx.request.body;
+
+    try {
+      await datasetService.updateDatasetState(dataset_id, "isFinished");
       await next();
     } catch (err) {
       console.log(err);

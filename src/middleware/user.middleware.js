@@ -39,14 +39,14 @@ const userLoginValidator = async (ctx, next) => {
 const confirmUser = async (ctx, next) => {
   const { username } = ctx.request.body;
   try {
-    const res = await getUserInfo({ username });
+    const res = await getUserInfoByUsername(username);
     if (res) {
       console.error("用户已存在", username);
-      ctx.app.emit("error", userAlreadyExist, ctx);
-      return;
+      return ctx.app.emit("error", userAlreadyExist, ctx);
     }
   } catch (err) {
     console.error("获取用户信息错误");
+    userRegisterError.result = err;
     ctx.app.emit("error", userRegisterError, ctx);
     return;
   }

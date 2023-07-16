@@ -21,13 +21,14 @@ const { consumeInvite } = require("../service/invite.service");
 class UserController {
   async register(ctx, next) {
     // 1. 获取数据
-    const { username, password, email,code } = ctx.request.body;
+    const { username, password, email,invite } = ctx.request.body;
     const {role} = ctx.state
     // 2. 操作数据库
     try {
       const res = await createUser(username, password, email,role);
       console.log(res);
-      const res1 = await consumeInvite(code,res.id);
+      const now = Date.now();
+      const res1 = await consumeInvite(invite,res.id,now);
       console.log(res1)
       // 3. 返回结果
       ctx.body = {
@@ -71,6 +72,9 @@ class UserController {
         message: "登录成功",
         result: {
           token: jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" }),
+          username:res.username,
+          role:res.role,
+          id:res.id
         },
       };
     } catch (err) {

@@ -11,10 +11,10 @@ const {
 
 class TrainRecordController {
   async createTrainRecord(ctx, next) {
-    const { dataset_id } = ctx.state;
+    const { train_set_id, validate_set_id ,remark} = ctx.request.body;
     const { id: u_id } = ctx.state.user;
     try {
-      const res = await addTrainRecord(dataset_id, u_id);
+      const res = await addTrainRecord(train_set_id, validate_set_id, u_id,remark);
       ctx.state.record_id = res.id;
     } catch (err) {
       console.log(err);
@@ -26,13 +26,11 @@ class TrainRecordController {
   }
 
   async updateTrainRecord(ctx, next) {
-    const { record_id } = ctx.state;
     try {
-      const now = new Date().getTime();
-      const res = await updateTrainRecord(record_id, now);
-
-      const timeDiffInMs = res.end_time - res.start_time;
-      ctx.state.duration = timeDiffInMs / 1000;
+      const now = Date.now();
+      const res = await updateTrainRecord(ctx.state.record_id, now);
+      console.log(res);
+      ctx.state.duration = res;
       await next();
     } catch (err) {
       console.log(err);

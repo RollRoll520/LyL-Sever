@@ -13,10 +13,19 @@ const TrainRecord = seq.define(
       autoIncrement: true,
       comment: "训练记录ID",
     },
-    dataset_id: {
+    train_set_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "训练所使用的数据集的编号",
+      comment: "训练所使用的训练集的编号",
+      references: {
+        model: Dataset,
+        key: "id",
+      },
+    },
+    validate_set_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      comment: "训练所使用的验证集的编号",
       references: {
         model: Dataset,
         key: "id",
@@ -61,7 +70,8 @@ const TrainRecord = seq.define(
   }
 );
 
-TrainRecord.belongsTo(Dataset, { foreignKey: "dataset_id" });
+TrainRecord.belongsTo(Dataset, { foreignKey: "train_set_id" });
+TrainRecord.belongsTo(Dataset, { foreignKey: "validate_set_id" });
 TrainRecord.belongsTo(User, { foreignKey: "u_id" });
 
 module.exports = TrainRecord;
