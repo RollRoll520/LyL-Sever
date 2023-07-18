@@ -8,6 +8,7 @@ const {
   downloadModelError,
 } = require("../const/err.type");
 const {
+  CATEGORY_FILE_DIR,
   DEFAULT_MODEL_PATH,
   TEST_PYTHON_PATH,
   TRAIN_PYTHON_PATH,
@@ -203,11 +204,23 @@ class ModelController {
       TEST_RESULT_DIR,
       `${u_id}_${username}`
     ); // 测试结果文件路径
+    const categoryDir = path.join(
+      __dirname,
+      CATEGORY_FILE_DIR,
+      `${u_id}_${username}`
+    ); // 测试结果文件路径
     if (!fs.existsSync(resultDir)) {
       fs.mkdirSync(resultDir);
     }
+    if (!fs.existsSync(categoryDir)) {
+      fs.mkdirSync(categoryDir);
+    }
     const resultPath = path.join(
       resultDir,
+      `${username}_${formattedTimeStr}.json`
+    );
+    const categoryPath = path.join(
+      categoryDir,
       `${username}_${formattedTimeStr}.json`
     );
     const modelFile = ctx.state.model_path; // 模型文件路径
@@ -216,11 +229,13 @@ class ModelController {
       // 执行 Python 脚本并等待结果
       const result = await runPythonScript(ctx, pyFilePath, [
         testSetPath,
+        categoryPath,
         resultPath,
         modelFile,
       ]);
       ctx.state.test_result = result;
       ctx.state.result_path = resultPath;
+      ctx.state.category_path = categoryPath;
       ctx.state.result_name = `${username}_${formattedTimeStr}.json`;
       await next();
       // 将 Python 脚本的输出作为响应返回给前端
@@ -235,7 +250,7 @@ class ModelController {
     const { train_record_id } = ctx.request.body;
     try {
       const res = await getTrainResultsByRecordId(train_record_id);
-      ctx.state.model_path=res.model_path;
+      ctx.state.model_path = res.model_path;
       await next();
     } catch (err) {
       console.log(err);

@@ -142,6 +142,24 @@ class lgb_model:
             json.dump(report_dict, f)
 
     @staticmethod
+    def save_category(y_pred, file_path):
+        mydict = {}
+        counts = np.zeros(6)
+        for i in y_pred:
+            counts[i] += 1
+        mydict = [
+            {'label': 0, 'count': counts[0]},
+            {'label': 1, 'count': counts[1]},
+            {'label': 2, 'count': counts[2]},
+            {'label': 3, 'count': counts[3]},
+            {'label': 4, 'count': counts[4]},
+            {'label': 5, 'count': counts[5]},
+        ]
+
+        with open(file_path, 'w') as f:
+            json.dump(mydict, f)
+
+    @staticmethod
     def fill(col):
         mean = col.mean()
         std = col.std()
@@ -153,7 +171,7 @@ class lgb_model:
             elif x < lower_bound:
                 return lower_bound
             else:
-                return x
+                return xß
         return col.map(trans)
 
 

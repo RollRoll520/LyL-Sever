@@ -4,7 +4,10 @@ const {
 } = require("../const/err.type");
 const path = require("path");
 const fs = require("fs");
-const { getUserTestRecords, getUserTestRecordsById } = require("../service/testRecord.service");
+const {
+  getUserTestRecords,
+  getUserTestRecordsById,
+} = require("../service/testRecord.service");
 const {
   addTestResult,
   getTestResultsByRecordId,
@@ -12,9 +15,15 @@ const {
 
 class TestResultService {
   async createTestResult(ctx, next) {
-    const { record_id, result_name, result_path, duration } = ctx.state;
+    const { record_id, result_name, category_path, result_path, duration } =
+      ctx.state;
     try {
-      const res = await addTestResult(record_id, result_name, result_path);
+      const res = await addTestResult(
+        record_id,
+        result_name,
+        category_path,
+        result_path
+      );
       ctx.body = {
         code: 0,
         message: "模型测试成功",
@@ -39,7 +48,8 @@ class TestResultService {
       );
       if (hasRecordId) {
         const result = await getTestResultsByRecordId(record_id);
-        const result_path = result.path;console.log(result);
+        const result_path = result.category_path;
+        console.log(result);
 
         const stat = fs.statSync(result_path);
         // 设置响应头，告诉浏览器响应体的类型和附件的名称

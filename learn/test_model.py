@@ -5,8 +5,7 @@ import pandas as pd
 from joblib import load
 from lgb_model import lgb_model
 
-
-def test_model(test_set_path: str, result_file: str, model_file: str = "./trained_model.joblib"):
+def test_model(test_set_path: str, category_file: str, result_file: str, model_file: str = "./trained_model.joblib"):
     """
     应用训练好的模型对测试样本进行结果预测。
 
@@ -27,15 +26,20 @@ def test_model(test_set_path: str, result_file: str, model_file: str = "./traine
     # 保存结果
     model.save_preds(data_test.iloc[:, 0], y_test_pred, result_file)
 
+    # 保存类别展示结果
+    model.save_category(y_test_pred, category_file)
+
+
 if __name__ == '__main__':
     warnings.filterwarnings('ignore')
     # 命令行参数解析
-    parser = argparse.ArgumentParser(description='train')
+    parser = argparse.ArgumentParser(description='test')
     parser.add_argument('test_set_path', type=str)
+    parser.add_argument('category_file', type=str)
     parser.add_argument('result_file', type=str)
     parser.add_argument('model_file', type=str)
     args = parser.parse_args()
 
     # 调用函数
-    test_model(args.test_set_path, args.result_file, args.model_file)
+    test_model(args.test_set_path, args.category_file, args.result_file, args.model_file)
 

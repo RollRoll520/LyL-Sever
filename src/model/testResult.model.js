@@ -28,8 +28,13 @@ const TestResult = seq.define(
     },
     path: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       comment: "模型测试生成的结果文件所在路径",
+    },
+    category_path: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: "模型测试生成的分类文件所在路径",
     },
   },
   {
@@ -40,4 +45,4 @@ const TestResult = seq.define(
 
 TestResult.belongsTo(TestRecord, { foreignKey: "test_record_id" });
 
-module.exports= TestResult;
+module.exports = TestResult;
