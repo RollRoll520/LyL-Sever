@@ -45,24 +45,24 @@ class ModelController {
     const train_report_dir = path.join(
       __dirname,
       TRAIN_REPORT_DIR,
-      `${u_id}_${username}`
+      `${u_id}`
     );
     const train_heat_dir = path.join(
       __dirname,
       TRAIN_HEAT_DIR,
-      `${u_id}_${username}`
+      `${u_id}`
     );
     const validate_report_dir = path.join(
       __dirname,
       VALIDATE_REPORT_DIR,
-      `${u_id}_${username}`
+      `${u_id}`
     );
     const validate_heat_dir = path.join(
       __dirname,
       VALIDATE_HEAT_DIR,
-      `${u_id}_${username}`
+      `${u_id}`
     );
-    const model_dir = path.join(__dirname, MODEL_DIR, `${u_id}_${username}`);
+    const model_dir = path.join(__dirname, MODEL_DIR, `${u_id}`);
     if (!fs.existsSync(train_report_dir)) {
       fs.mkdirSync(train_report_dir);
     }
@@ -80,23 +80,23 @@ class ModelController {
     }
     const train_report_path = path.join(
       train_report_dir,
-      `${username}_${formattedTimeStr}.json`
+      `${u_id}_${formattedTimeStr}.json`
     );
     const train_heat_path = path.join(
       train_heat_dir,
-      `${username}_${formattedTimeStr}.json`
+      `${u_id}_${formattedTimeStr}.json`
     );
     const validate_report_path = path.join(
       validate_report_dir,
-      `${username}_${formattedTimeStr}.json`
+      `${u_id}_${formattedTimeStr}.json`
     );
     const validate_heat_path = path.join(
       validate_heat_dir,
-      `${username}_${formattedTimeStr}.json`
+      `${u_id}_${formattedTimeStr}.json`
     );
     const model_path = path.join(
       model_dir,
-      `${username}_${formattedTimeStr}.joblib`
+      `${u_id}_${formattedTimeStr}.joblib`
     );
 
     try {
@@ -147,14 +147,14 @@ class ModelController {
     const resultDir = path.join(
       __dirname,
       TEST_RESULT_DIR,
-      `${u_id}_${username}`
+      `${u_id}`
     ); // 测试结果文件路径
     if (!fs.existsSync(resultDir)) {
       fs.mkdirSync(resultDir);
     }
     const resultPath = path.join(
       resultDir,
-      `${username}_${formattedTimeStr}.json`
+      `${u_id}_${formattedTimeStr}.json`
     );
     const modelFile = path.join(__dirname, DEFAULT_MODEL_PATH); // 模型文件路径
 
@@ -167,7 +167,7 @@ class ModelController {
       ]);
       ctx.state.test_result = result;
       ctx.state.result_path = resultPath;
-      ctx.state.result_name = `${username}_${formattedTimeStr}.json`;
+      ctx.state.result_name = `${u_id}_${formattedTimeStr}.json`;
       // 将 Python 脚本的输出作为响应返回给前端
 
       await next();
@@ -202,12 +202,12 @@ class ModelController {
     const resultDir = path.join(
       __dirname,
       TEST_RESULT_DIR,
-      `${u_id}_${username}`
+      `${u_id}`
     ); // 测试结果文件路径
     const categoryDir = path.join(
       __dirname,
       CATEGORY_FILE_DIR,
-      `${u_id}_${username}`
+      `${u_id}`
     ); // 测试结果文件路径
     if (!fs.existsSync(resultDir)) {
       fs.mkdirSync(resultDir);
@@ -217,11 +217,11 @@ class ModelController {
     }
     const resultPath = path.join(
       resultDir,
-      `${username}_${formattedTimeStr}.json`
+      `${u_id}_${formattedTimeStr}.json`
     );
     const categoryPath = path.join(
       categoryDir,
-      `${username}_${formattedTimeStr}.json`
+      `${u_id}_${formattedTimeStr}.json`
     );
     const modelFile = ctx.state.model_path; // 模型文件路径
 
@@ -236,7 +236,7 @@ class ModelController {
       ctx.state.test_result = result;
       ctx.state.result_path = resultPath;
       ctx.state.category_path = categoryPath;
-      ctx.state.result_name = `${username}_${formattedTimeStr}.json`;
+      ctx.state.result_name = `${u_id}_${formattedTimeStr}.json`;
       await next();
       // 将 Python 脚本的输出作为响应返回给前端
     } catch (error) {

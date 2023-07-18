@@ -101,7 +101,7 @@ class lgb_model:
     def save_preds(sample_id, preds, file_path):
         # 创建字典
         items = zip(sample_id, preds)
-        my_dict = {int(k): int(v) for k, v in items}
+        my_dict = {k: int(v) for k, v in items}
 
         # 保存结果
         with open(file_path, 'w') as f:
@@ -171,7 +171,7 @@ class lgb_model:
             elif x < lower_bound:
                 return lower_bound
             else:
-                return xß
+                return x
         return col.map(trans)
 
 

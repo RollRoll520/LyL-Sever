@@ -41,12 +41,12 @@ class DatasetController {
       // 将文件保存到指定目录下
       const targetDir =
         type == "single_test"
-          ? path.join(__dirname, SINGLE_TEST_DIR, `${u_id}_${username}`)
+          ? path.join(__dirname, SINGLE_TEST_DIR, `${u_id}`)
           : type == "mul_test"
-          ? path.join(__dirname, MULTIPLE_TEST_DIR, `${u_id}_${username}`)
+          ? path.join(__dirname, MULTIPLE_TEST_DIR, `${u_id}`)
           : type == "validate"
-          ? path.join(__dirname, VALIDATE_DATASET_DIR, `${u_id}_${username}`)
-          : path.join(__dirname, TRAIN_DATASET_DIR, `${u_id}_${username}`);
+          ? path.join(__dirname, VALIDATE_DATASET_DIR, `${u_id}`)
+          : path.join(__dirname, TRAIN_DATASET_DIR, `${u_id}`);
       if (!fs.existsSync(targetDir)) {
         fs.mkdirSync(targetDir);
       }
@@ -68,7 +68,7 @@ class DatasetController {
 
       const targetPath = path.join(
         targetDir,
-        `${username}_${formattedTimeStr}.csv`
+        `${u_id}_${formattedTimeStr}.csv`
       );
       fs.renameSync(tempFile.filepath, targetPath);
 

@@ -81,7 +81,7 @@ class TrainResult {
         ctx.set("Content-Type", "application/octet-stream");
         ctx.set(
           "Content-Disposition",
-          `attachment; filename="${path.basename(result_path)}"`
+          `attachment; filename="result.json"`
         );
         ctx.set("Content-Length", stat.size);
 
